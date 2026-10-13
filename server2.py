@@ -22,8 +22,17 @@ while True:
     client_socket, addr = server_socket.accept()
     print(f"Conexión desde {addr}")
 
-    # Enviar mensaje de bienvenida
-    client_socket.send(b"Hola desde el servidor en Railway!\n")
+    try:
+        # Recibir datos del cliente
+        data = client_socket.recv(1024).decode("utf-8").strip()
+        if data:
+            print(f"Cliente dice: {data}")
+
+        # Enviar respuesta terminada en \0 (necesario para Flash AS2)
+        client_socket.send("Hola desde el servidor en Railway!\0".encode("utf-8"))
+
+    except Exception as e:
+        print(f"Error: {e}")
 
     # Cerrar conexión
     client_socket.close()
