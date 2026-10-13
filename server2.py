@@ -2,7 +2,7 @@ import os
 import socket
 
 # Railway asigna el puerto en la variable de entorno PORT
-PORT = int(os.environ.get("PORT", 12345))  # usa 12345 si no existe PORT
+PORT = int(os.environ.get("PORT", 8080))  # usa 12345 si no existe PORT
 HOST = "0.0.0.0"  # escucha en todas las interfaces
 
 # Crear socket TCP
