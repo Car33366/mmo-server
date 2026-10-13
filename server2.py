@@ -29,7 +29,8 @@ while True:
             print(f"Cliente dice: {data}")
 
         # Enviar respuesta terminada en \0 (necesario para Flash AS2)
-        client_socket.send("Hola desde el servidor en Railway!\0".encode("utf-8"))
+        mensaje = "Hola desde el servidor en Railway!\0"
+        client_socket.send(mensaje.encode("utf-8"))
 
     except Exception as e:
         print(f"Error: {e}")
