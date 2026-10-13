@@ -1,9 +1,7 @@
-import os
 import socket
 
-# Railway asigna el puerto en la variable de entorno PORT
-PORT = int(os.environ.get("PORT", 8080))  # usa 12345 si no existe PORT
-HOST = "0.0.0.0"  # escucha en todas las interfaces
+HOST = "0.0.0.0"   # escucha en todas las interfaces
+PORT = 8080        # puerto fijo, el mismo que Railway expone
 
 # Crear socket TCP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
