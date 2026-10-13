@@ -1,34 +1,29 @@
-import os, socket, threading
+import os
+import socket
 
-HOST = "0.0.0.0"
-PORT = int(os.environ.get("PORT", 1200))  # Railway asigna el puerto
+# Railway asigna el puerto en la variable de entorno PORT
+PORT = int(os.environ.get("PORT", 12345))  # usa 12345 si no existe PORT
+HOST = "0.0.0.0"  # escucha en todas las interfaces
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((HOST, PORT))
-server.listen()
+# Crear socket TCP
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Permitir reusar el puerto si se reinicia rápido
+server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+# Asociar el socket al host y puerto
+server_socket.bind((HOST, PORT))
+server_socket.listen(5)
 
 print(f"Servidor escuchando en {HOST}:{PORT}")
 
-clients = []
-
-def handle_client(conn, addr):
-    print(f"Conexión desde {addr}")
-    while True:
-        try:
-            data = conn.recv(1024).decode()
-            if not data:
-                break
-            print(f"{addr}: {data}")
-            # reenviar a todos los clientes conectados
-            for c in clients:
-                if c != conn:
-                    c.sendall(data.encode())
-        except:
-            break
-    conn.close()
-    clients.remove(conn)
-
 while True:
-    conn, addr = server.accept()
-    clients.append(conn)
-    threading.Thread(target=handle_client, args=(conn, addr)).start()
+    # Esperar conexión de cliente
+    client_socket, addr = server_socket.accept()
+    print(f"Conexión desde {addr}")
+
+    # Enviar mensaje de bienvenida
+    client_socket.send(b"Hola desde el servidor en Railway!\n")
+
+    # Cerrar conexión
+    client_socket.close()
